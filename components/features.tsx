@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Bot,
   Wand2,
@@ -6,6 +8,7 @@ import {
   Puzzle,
   Monitor,
 } from "lucide-react";
+import Link from "next/link";
 
 const features = [
   {
@@ -64,12 +67,13 @@ export function Features() {
           {features.map((feature) => {
             const Icon = feature.icon;
             return (
-              <div
+              <Link
                 key={feature.title}
-                className="group rounded-xl border border-border bg-card p-6 transition-colors hover:border-accent/50"
+                href="/editor"
+                className="group rounded-xl border border-border bg-card p-6 transition-all duration-200 hover:border-accent/50 hover:bg-card/80 hover:shadow-lg hover:shadow-accent/5 hover:-translate-y-1 active:scale-[0.98]"
               >
-                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-secondary">
-                  <Icon className="h-6 w-6 text-accent" />
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-secondary transition-colors group-hover:bg-accent/20">
+                  <Icon className="h-6 w-6 text-accent transition-transform group-hover:scale-110" />
                 </div>
                 <h3 className="mb-2 text-lg font-semibold text-card-foreground">
                   {feature.title}
@@ -77,7 +81,13 @@ export function Features() {
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {feature.description}
                 </p>
-              </div>
+                <span className="mt-4 inline-flex items-center text-sm font-medium text-accent opacity-0 transition-opacity group-hover:opacity-100">
+                  Try it now
+                  <svg className="ml-1 h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </span>
+              </Link>
             );
           })}
         </div>

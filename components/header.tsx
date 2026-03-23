@@ -7,11 +7,23 @@ import { Menu, X, Github } from "lucide-react";
 const navLinks = [
   { href: "#features", label: "Features" },
   { href: "#preview", label: "Preview" },
-  { href: "https://github.com/aregrid/frame", label: "Docs" },
+  { href: "https://github.com/aregrid/frame", label: "Docs", external: true },
 ];
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (href.startsWith("#")) {
+      e.preventDefault();
+      const element = document.querySelector(href);
+      if (element) {
+        const offsetTop = element.getBoundingClientRect().top + window.pageYOffset - 80;
+        window.scrollTo({ top: offsetTop, behavior: "smooth" });
+      }
+      setMobileMenuOpen(false);
+    }
+  };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
@@ -27,18 +39,21 @@ export function Header() {
 
         <nav className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
-            <Link
+            <a
               key={link.href}
               href={link.href}
+              onClick={(e) => !link.external && handleNavClick(e, link.href)}
+              target={link.external ? "_blank" : undefined}
+              rel={link.external ? "noopener noreferrer" : undefined}
               className="text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               {link.label}
-            </Link>
+            </a>
           ))}
         </nav>
 
         <div className="hidden items-center gap-4 md:flex">
-          <Link
+          <a
             href="https://github.com/aregrid/frame"
             target="_blank"
             rel="noopener noreferrer"
@@ -46,7 +61,7 @@ export function Header() {
           >
             <Github className="h-4 w-4" />
             GitHub
-          </Link>
+          </a>
           <Link
             href="/editor"
             className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
@@ -73,17 +88,19 @@ export function Header() {
         <div className="border-b border-border bg-background md:hidden">
           <nav className="flex flex-col gap-4 px-4 py-4">
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.href}
                 href={link.href}
+                onClick={(e) => !link.external && handleNavClick(e, link.href)}
+                target={link.external ? "_blank" : undefined}
+                rel={link.external ? "noopener noreferrer" : undefined}
                 className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                onClick={() => setMobileMenuOpen(false)}
               >
                 {link.label}
-              </Link>
+              </a>
             ))}
             <div className="flex flex-col gap-2 pt-4">
-              <Link
+              <a
                 href="https://github.com/aregrid/frame"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -91,7 +108,7 @@ export function Header() {
               >
                 <Github className="h-4 w-4" />
                 GitHub
-              </Link>
+              </a>
               <Link
                 href="/editor"
                 className="rounded-lg bg-primary px-4 py-2 text-center text-sm font-medium text-primary-foreground"
