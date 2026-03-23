@@ -1,8 +1,20 @@
 "use client";
 
-import { Play, Pause, Volume2, Maximize, SkipBack, SkipForward } from "lucide-react";
+import { useState } from "react";
+import { Play, Pause, Volume2, VolumeX, Maximize, SkipBack, SkipForward } from "lucide-react";
 
 export function Preview() {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [progress, setProgress] = useState(33);
+
+  const handleProgressClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const percentage = (x / rect.width) * 100;
+    setProgress(Math.max(0, Math.min(100, percentage)));
+  };
+
   return (
     <section id="preview" className="border-t border-border py-20 sm:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -33,10 +45,19 @@ export function Preview() {
                 <div className="flex flex-1 gap-4">
                   <div className="flex-1 rounded-lg bg-secondary flex items-center justify-center">
                     <div className="text-center">
-                      <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent/20">
-                        <Play className="h-8 w-8 text-accent" />
-                      </div>
-                      <p className="text-sm text-muted-foreground">Video Preview</p>
+                      <button
+                        onClick={() => setIsPlaying(!isPlaying)}
+                        className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-accent/20 transition-all hover:bg-accent/40 hover:scale-105 active:scale-95"
+                      >
+                        {isPlaying ? (
+                          <Pause className="h-8 w-8 text-accent" />
+                        ) : (
+                          <Play className="h-8 w-8 text-accent ml-1" />
+                        )}
+                      </button>
+                      <p className="text-sm text-muted-foreground">
+                        {isPlaying ? "Playing..." : "Click to Play"}
+                      </p>
                     </div>
                   </div>
                   <div className="w-64 rounded-lg bg-secondary p-3 hidden lg:block">
@@ -53,21 +74,62 @@ export function Preview() {
                 </div>
                 <div className="rounded-lg bg-secondary p-3">
                   <div className="flex items-center gap-3 mb-3">
-                    <SkipBack className="h-4 w-4 text-muted-foreground" />
-                    <Pause className="h-5 w-5 text-foreground" />
-                    <SkipForward className="h-4 w-4 text-muted-foreground" />
-                    <div className="h-1 flex-1 rounded-full bg-card">
-                      <div className="h-1 w-1/3 rounded-full bg-accent" />
+                    <button 
+                      onClick={() => setProgress(Math.max(0, progress - 10))}
+                      className="text-muted-foreground transition-colors hover:text-foreground active:scale-90"
+                    >
+                      <SkipBack className="h-4 w-4" />
+                    </button>
+                    <button
+                      onClick={() => setIsPlaying(!isPlaying)}
+                      className="text-foreground transition-colors hover:text-accent active:scale-90"
+                    >
+                      {isPlaying ? (
+                        <Pause className="h-5 w-5" />
+                      ) : (
+                        <Play className="h-5 w-5" />
+                      )}
+                    </button>
+                    <button 
+                      onClick={() => setProgress(Math.min(100, progress + 10))}
+                      className="text-muted-foreground transition-colors hover:text-foreground active:scale-90"
+                    >
+                      <SkipForward className="h-4 w-4" />
+                    </button>
+                    <div 
+                      className="h-1 flex-1 rounded-full bg-card cursor-pointer"
+                      onClick={handleProgressClick}
+                    >
+                      <div 
+                        className="h-1 rounded-full bg-accent transition-all duration-150" 
+                        style={{ width: `${progress}%` }}
+                      />
                     </div>
-                    <span className="text-xs text-muted-foreground font-mono">01:23 / 04:56</span>
-                    <Volume2 className="h-4 w-4 text-muted-foreground" />
-                    <Maximize className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-xs text-muted-foreground font-mono">
+                      {String(Math.floor((progress / 100) * 296 / 60)).padStart(2, '0')}:
+                      {String(Math.floor((progress / 100) * 296 % 60)).padStart(2, '0')} / 04:56
+                    </span>
+                    <button 
+                      onClick={() => setIsMuted(!isMuted)}
+                      className="text-muted-foreground transition-colors hover:text-foreground active:scale-90"
+                    >
+                      {isMuted ? (
+                        <VolumeX className="h-4 w-4" />
+                      ) : (
+                        <Volume2 className="h-4 w-4" />
+                      )}
+                    </button>
+                    <button className="text-muted-foreground transition-colors hover:text-foreground active:scale-90">
+                      <Maximize className="h-4 w-4" />
+                    </button>
                   </div>
                   <div className="flex gap-1 h-12">
                     {[30, 50, 70, 40, 60, 80, 45, 55, 75, 35, 65, 85, 40, 60, 50, 70, 45, 55, 65, 75].map((height, i) => (
                       <div
                         key={i}
-                        className="flex-1 rounded bg-accent/30"
+                        className={`flex-1 rounded transition-colors ${
+                          i < Math.floor((progress / 100) * 20) ? 'bg-accent/60' : 'bg-accent/30'
+                        }`}
                         style={{ height: `${height}%` }}
                       />
                     ))}
