@@ -61,22 +61,25 @@ export function Features() {
         </div>
 
         <div className="mx-auto mt-16 grid max-w-5xl gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {features.map((feature) => (
-            <div
-              key={feature.title}
-              className="group rounded-xl border border-border bg-card p-6 transition-colors hover:border-accent/50"
-            >
-              <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-secondary">
-                <feature.icon className="h-6 w-6 text-accent" />
+          {features.map((feature) => {
+            const Icon = feature.icon;
+            return (
+              <div
+                key={feature.title}
+                className="group rounded-xl border border-border bg-card p-6 transition-colors hover:border-accent/50"
+              >
+                <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-lg bg-secondary">
+                  <Icon className="h-6 w-6 text-accent" />
+                </div>
+                <h3 className="mb-2 text-lg font-semibold text-card-foreground">
+                  {feature.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {feature.description}
+                </p>
               </div>
-              <h3 className="mb-2 text-lg font-semibold text-card-foreground">
-                {feature.title}
-              </h3>
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                {feature.description}
-              </p>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

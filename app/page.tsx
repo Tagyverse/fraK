@@ -5,8 +5,9 @@ import { Preview } from "@/components/preview";
 import { Footer } from "@/components/footer";
 
 export default function Home() {
+  console.log("[v0] Home page rendering");
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen bg-background text-foreground">
       <Header />
       <Hero />
       <Features />

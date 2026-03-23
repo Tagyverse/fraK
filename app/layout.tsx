@@ -4,25 +4,18 @@ import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-sans",
+  variable: "--font-inter",
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--font-jetbrains",
 });
 
 export const metadata: Metadata = {
   title: "Frame - AI-Powered Video Editing",
   description:
     "Open-source AI video editing with a code-like creative flow. Automate tasks, enhance quality, and create stunning videos effortlessly.",
-  keywords: [
-    "AI Video Editing",
-    "Video Editor",
-    "AI Agent",
-    "Open Source",
-    "Video Production",
-  ],
 };
 
 export const viewport: Viewport = {
@@ -33,12 +26,12 @@ export const viewport: Viewport = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+      <body className="font-sans antialiased">
         {children}
       </body>
     </html>
